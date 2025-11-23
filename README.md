@@ -2,7 +2,7 @@
 
 This project demonstrates how to automate **Azure 3-tier infrastructure deployments** using **Modular Terraform**, **Azure Key Vault 🔐**, and **GitHub Actions CI/CD 🤖**.
 
-All environments — **Dev, Test, Prod 🌍** — are deployed using **reusable modules** with **secure secret handling** (🔑 **no secrets stored in code**).
+All environments - **Dev, Test, Prod 🌍** - are deployed using **reusable modules** with **secure secret handling** (🔑 **no secrets stored in code**).
 
 ### 🔧 What this setup includes:
 
@@ -21,8 +21,3 @@ All environments — **Dev, Test, Prod 🌍** — are deployed using **reusable 
 * 🧠 Reduced manual errors & minimized configuration drift
 
 ⚡ **Deploy secure cloud infrastructure faster, reliably, and with enterprise-level standardization.**
-
----
-
-Let me know if you want a **LinkedIn post version with hashtags and CTA** 🙌 🙂
-
