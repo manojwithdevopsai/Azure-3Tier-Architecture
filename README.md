@@ -1,5 +1,5 @@
----
-#🚀 **Automated Azure 3-Tier Infrastructure with Modular Terraform & GitHub Actions**
+
+# 🚀 **Automated Azure 3-Tier Infrastructure with Modular Terraform & GitHub Actions**
 
 This project demonstrates how to automate **Azure 3-tier infrastructure deployments** using **Modular Terraform**, **Azure Key Vault 🔐**, and **GitHub Actions CI/CD 🤖**.
 
