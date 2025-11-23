@@ -27,3 +27,8 @@ variable "kv_resource_group_name" {
   description = "Virtual machine name"
   type        = string
 }
+ 
+variable "container_name" {
+  description = "Virtual machine name"
+  type        = string
+}
