@@ -2,4 +2,5 @@ rg_name      = "rg-dev"
 vnet_name    = "vnet-dev"
 vm_name      = "vm-dev"
 location     = "eastus"
-
+kv_name      = "demo-terraform-keyvault"
+kv_resource_group_name   = "demo-terraform-rg"
