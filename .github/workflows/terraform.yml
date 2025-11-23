@@ -34,7 +34,7 @@ jobs:
           terraform_version: 1.5.7
 
       - name: Init (Dev)
-        run: terraform init -backend-config="key=3tier/dev.terraform.tfstate"
+        run: terraform init
 
       - name: Plan (Dev)
         run: terraform plan -var-file="environments/dev/terraform.tfvars"
@@ -79,7 +79,7 @@ jobs:
           terraform_version: 1.5.7
 
       - name: Init (Test)
-        run: terraform init -backend-config="key=3tier/test.terraform.tfstate"
+        run: terraform init
 
       - name: Plan (Test)
         run: terraform plan -var-file="environments/test/terraform.tfvars"
@@ -124,7 +124,7 @@ jobs:
           terraform_version: 1.5.7
 
       - name: Init (Prod)
-        run: terraform init -backend-config="key=3tier/prod.terraform.tfstate"
+        run: terraform init
 
       - name: Plan (Prod)
         run: terraform plan -var-file="environments/prod/terraform.tfvars"
