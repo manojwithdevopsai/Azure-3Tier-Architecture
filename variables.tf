@@ -18,4 +18,12 @@ variable "vm_name" {
   type        = string
 }
 
+variable "kv_name" {
+  description = "Virtual machine name"
+  type        = string
+}
 
+variable "kv_resource_group_name" {
+  description = "Virtual machine name"
+  type        = string
+}
