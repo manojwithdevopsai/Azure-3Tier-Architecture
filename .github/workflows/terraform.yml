@@ -43,6 +43,13 @@ jobs:
 
       - name: Apply (Dev)
         run: terraform apply -auto-approve -var-file="environments/dev/terraform.tfvars"
+      - name: Azure CLI Login
+        if: failure()
+        run: |
+          az login --service-principal \
+            --username $ARM_CLIENT_ID \
+            --password $ARM_CLIENT_SECRET \
+            --tenant $ARM_TENANT_ID
       
       - name: Auto Unlock if Failed
         if: failure()
@@ -100,6 +107,14 @@ jobs:
       - name: Apply (Test)
         run: terraform apply -auto-approve -var-file="environments/test/terraform.tfvars"
 
+      - name: Azure CLI Login
+        if: failure()
+        run: |
+          az login --service-principal \
+            --username $ARM_CLIENT_ID \
+            --password $ARM_CLIENT_SECRET \
+            --tenant $ARM_TENANT_ID
+            
       - name: Auto Unlock if Failed
         if: failure()
         run: |
@@ -156,6 +171,14 @@ jobs:
       - name: Apply (Prod)
         run: terraform apply -auto-approve -var-file="environments/prod/terraform.tfvars"
       
+      - name: Azure CLI Login
+        if: failure()
+        run: |
+          az login --service-principal \
+            --username $ARM_CLIENT_ID \
+            --password $ARM_CLIENT_SECRET \
+            --tenant $ARM_TENANT_ID
+            
       - name: Auto Unlock if Failed
         if: failure()
         run: |
