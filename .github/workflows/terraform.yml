@@ -54,20 +54,19 @@ jobs:
       - name: Auto Unlock if Failed
         if: failure()
         run: |
-          echo "Checking for stale lock files..."
-          LOCK_BLOB=$(az storage blob list \
+          STATE_FILE="3tier/dev.terraform.tfstate"
+          LOCK_ID=$(az storage blob metadata show \
             --account-name "$BACKEND_SA" \
             --container-name "$BACKEND_CONTAINER" \
-            --query "[?contains(name, '.lock')].name" -o tsv)
-
-          if [ ! -z "$LOCK_BLOB" ]; then
-            echo "Deleting lock: $LOCK_BLOB"
-            az storage blob delete \
-              --account-name "$BACKEND_SA" \
-              --container-name "$BACKEND_CONTAINER" \
-              --name "$LOCK_BLOB"
+            --name "$STATE_FILE" \
+            --auth-mode login \
+            --query "lockId" -o tsv)
+      
+          if [ ! -z "$LOCK_ID" ]; then
+            echo "Unlocking stale metadata lock: $LOCK_ID"
+            terraform force-unlock -force "$LOCK_ID"
           else
-            echo "No lock found"
+            echo "No lock metadata found"
           fi
           
           
@@ -114,26 +113,26 @@ jobs:
             --username $ARM_CLIENT_ID \
             --password $ARM_CLIENT_SECRET \
             --tenant $ARM_TENANT_ID
-            
+
       - name: Auto Unlock if Failed
         if: failure()
         run: |
-          echo "Checking for stale lock files..."
-          LOCK_BLOB=$(az storage blob list \
+          STATE_FILE="3tier/dev.terraform.tfstate"
+          LOCK_ID=$(az storage blob metadata show \
             --account-name "$BACKEND_SA" \
             --container-name "$BACKEND_CONTAINER" \
-            --query "[?contains(name, '.lock')].name" -o tsv)
-
-          if [ ! -z "$LOCK_BLOB" ]; then
-            echo "Deleting lock: $LOCK_BLOB"
-            az storage blob delete \
-              --account-name "$BACKEND_SA" \
-              --container-name "$BACKEND_CONTAINER" \
-              --name "$LOCK_BLOB"
+            --name "$STATE_FILE" \
+            --auth-mode login \
+            --query "lockId" -o tsv)
+      
+          if [ ! -z "$LOCK_ID" ]; then
+            echo "Unlocking stale metadata lock: $LOCK_ID"
+            terraform force-unlock -force "$LOCK_ID"
           else
-            echo "No lock found"
+            echo "No lock metadata found"
           fi
-          
+            
+      
           
   prod:
     name: Deploy Prod
@@ -178,22 +177,21 @@ jobs:
             --username $ARM_CLIENT_ID \
             --password $ARM_CLIENT_SECRET \
             --tenant $ARM_TENANT_ID
-            
+
       - name: Auto Unlock if Failed
         if: failure()
         run: |
-          echo "Checking for stale lock files..."
-          LOCK_BLOB=$(az storage blob list \
+          STATE_FILE="3tier/dev.terraform.tfstate"
+          LOCK_ID=$(az storage blob metadata show \
             --account-name "$BACKEND_SA" \
             --container-name "$BACKEND_CONTAINER" \
-            --query "[?contains(name, '.lock')].name" -o tsv)
-
-          if [ ! -z "$LOCK_BLOB" ]; then
-            echo "Deleting lock: $LOCK_BLOB"
-            az storage blob delete \
-              --account-name "$BACKEND_SA" \
-              --container-name "$BACKEND_CONTAINER" \
-              --name "$LOCK_BLOB"
+            --name "$STATE_FILE" \
+            --auth-mode login \
+            --query "lockId" -o tsv)
+      
+          if [ ! -z "$LOCK_ID" ]; then
+            echo "Unlocking stale metadata lock: $LOCK_ID"
+            terraform force-unlock -force "$LOCK_ID"
           else
-            echo "No lock found"
+            echo "No lock metadata found"
           fi
