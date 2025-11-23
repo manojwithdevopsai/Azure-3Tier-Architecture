@@ -2,4 +2,5 @@ rg_name      = "rg-prod"
 vnet_name    = "vnet-prod"
 vm_name      = "vm-prod"
 location     = "centralus"
-
+kv_name      = "demo-terraform-keyvault"
+kv_resource_group_name   = "demo-terraform-rg"
