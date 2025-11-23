@@ -19,16 +19,21 @@ variable "vm_name" {
 }
 
 variable "kv_name" {
-  description = "Virtual machine name"
+  description = "keyvault name"
   type        = string
 }
 
 variable "kv_resource_group_name" {
-  description = "Virtual machine name"
+  description = "keyvault resource group name"
   type        = string
 }
  
 variable "container_name" {
-  description = "Virtual machine name"
+  description = "Container name"
+  type        = string
+}
+
+variable "storage_account_name" {
+  description = "storage account name"
   type        = string
 }
