@@ -20,6 +20,8 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VAR_vm_username: ${{ secrets.TF_VAR_vm_username }}
       TF_VAR_vm_password: ${{ secrets.TF_VAR_vm_password }}
+      BACKEND_SA: ${{ secrets.BACKEND_SA }}
+      BACKEND_CONTAINER: ${{ secrets.BACKEND_CONTAINER }}
       ARM_USE_OIDC: false
     defaults:
       run:
@@ -42,16 +44,25 @@ jobs:
       - name: Apply (Dev)
         run: terraform apply -auto-approve -var-file="environments/dev/terraform.tfvars"
       
-      - name: Force Unlock if Failed
+      - name: Auto Unlock if Failed
         if: failure()
         run: |
-          LOCK_ID=$(terraform show 2>/dev/null | grep "ID:" | awk '{print $2}')
-          if [ ! -z "$LOCK_ID" ]; then
-            echo "Unlocking stale lock: $LOCK_ID"
-            terraform force-unlock -force $LOCK_ID
+          echo "Checking for stale lock files..."
+          LOCK_BLOB=$(az storage blob list \
+            --account-name "$BACKEND_SA" \
+            --container-name "$BACKEND_CONTAINER" \
+            --query "[?contains(name, '.lock')].name" -o tsv)
+
+          if [ ! -z "$LOCK_BLOB" ]; then
+            echo "Deleting lock: $LOCK_BLOB"
+            az storage blob delete \
+              --account-name "$BACKEND_SA" \
+              --container-name "$BACKEND_CONTAINER" \
+              --name "$LOCK_BLOB"
           else
-            echo "No lock ID found"
+            echo "No lock found"
           fi
+          
           
   test:
     name: Deploy Test
@@ -65,6 +76,8 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VAR_vm_username: ${{ secrets.TF_VAR_vm_username }}
       TF_VAR_vm_password: ${{ secrets.TF_VAR_vm_password }}
+      BACKEND_SA: ${{ secrets.BACKEND_SA }}
+      BACKEND_CONTAINER: ${{ secrets.BACKEND_CONTAINER }}
       ARM_USE_OIDC: false
     defaults:
       run:
@@ -87,16 +100,25 @@ jobs:
       - name: Apply (Test)
         run: terraform apply -auto-approve -var-file="environments/test/terraform.tfvars"
 
-      - name: Force Unlock if Failed
+      - name: Auto Unlock if Failed
         if: failure()
         run: |
-          LOCK_ID=$(terraform show 2>/dev/null | grep "ID:" | awk '{print $2}')
-          if [ ! -z "$LOCK_ID" ]; then
-            echo "Unlocking stale lock: $LOCK_ID"
-            terraform force-unlock -force $LOCK_ID
+          echo "Checking for stale lock files..."
+          LOCK_BLOB=$(az storage blob list \
+            --account-name "$BACKEND_SA" \
+            --container-name "$BACKEND_CONTAINER" \
+            --query "[?contains(name, '.lock')].name" -o tsv)
+
+          if [ ! -z "$LOCK_BLOB" ]; then
+            echo "Deleting lock: $LOCK_BLOB"
+            az storage blob delete \
+              --account-name "$BACKEND_SA" \
+              --container-name "$BACKEND_CONTAINER" \
+              --name "$LOCK_BLOB"
           else
-            echo "No lock ID found"
+            echo "No lock found"
           fi
+          
           
   prod:
     name: Deploy Prod
@@ -110,6 +132,8 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       TF_VAR_vm_username: ${{ secrets.TF_VAR_vm_username }}
       TF_VAR_vm_password: ${{ secrets.TF_VAR_vm_password }}
+      BACKEND_SA: ${{ secrets.BACKEND_SA }}
+      BACKEND_CONTAINER: ${{ secrets.BACKEND_CONTAINER }}
       ARM_USE_OIDC: false
     defaults:
       run:
@@ -132,13 +156,21 @@ jobs:
       - name: Apply (Prod)
         run: terraform apply -auto-approve -var-file="environments/prod/terraform.tfvars"
       
-      - name: Force Unlock if Failed
+      - name: Auto Unlock if Failed
         if: failure()
         run: |
-          LOCK_ID=$(terraform show 2>/dev/null | grep "ID:" | awk '{print $2}')
-          if [ ! -z "$LOCK_ID" ]; then
-            echo "Unlocking stale lock: $LOCK_ID"
-            terraform force-unlock -force $LOCK_ID
+          echo "Checking for stale lock files..."
+          LOCK_BLOB=$(az storage blob list \
+            --account-name "$BACKEND_SA" \
+            --container-name "$BACKEND_CONTAINER" \
+            --query "[?contains(name, '.lock')].name" -o tsv)
+
+          if [ ! -z "$LOCK_BLOB" ]; then
+            echo "Deleting lock: $LOCK_BLOB"
+            az storage blob delete \
+              --account-name "$BACKEND_SA" \
+              --container-name "$BACKEND_CONTAINER" \
+              --name "$LOCK_BLOB"
           else
-            echo "No lock ID found"
+            echo "No lock found"
           fi
