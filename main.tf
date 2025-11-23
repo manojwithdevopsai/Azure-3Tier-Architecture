@@ -31,8 +31,8 @@ module "nsg" {
 }
 
 data "azurerm_key_vault" "kv" {
-  name                = "raghumyKeyVaulttfstate1"
-  resource_group_name = "tfstate-rg"
+  name                = ${var.kv_name}
+  resource_group_name = ${var.kv_resource_group_name}
 }
 
 data "azurerm_key_vault_secret" "vm_username" {
